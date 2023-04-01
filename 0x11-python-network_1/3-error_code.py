@@ -1,29 +1,17 @@
 #!/usr/bin/python3
-
-"""Sends a request to the URL and displays the body of the response"""
-
-from urllib.request import urlopen
-
-from urllib.parse import urlparse
-
-from urllib.error import HTTPError
+"""A script that
+- takes in a URL,
+- sends a request to the URL
+- and displays the body of the response (decoded in utf-8).
+"""
 
 import sys
-
-
+from urllib.request import urlopen
+from urllib.error import HTTPError
 
 if __name__ == "__main__":
-    
-    url = sys.argv[1]
-    
     try:
-        
-        with urlopen(url) as response:
-            
-            page = response.read()
-            
-            print(page.decode('utf-8'))
-            
+        with urlopen(sys.argv[1]) as res:
+            print(res.read().decode('utf-8'))
     except HTTPError as e:
-        
-        print('Error code: {}'.format(e.code))
+        print("Error code: {}".format(e.code))

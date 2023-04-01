@@ -1,35 +1,23 @@
 #!/usr/bin/python3
-
-"""Sends a search parameter to a URL."""
-
-import requests
-
+"""A script tha:
+- takes in a letter
+- sends POST request to http://0.0.0.0:5000/search_user
+with the letter as a parameter.
+"""
 import sys
-
+import requests
 
 
 if __name__ == "__main__":
-    
-    url = "http://0.0.0.0:5000/search_user"
-    
-    search_query = sys.argv[1] if len(sys.argv) > 1 else ""
-    
-    data = {'q': search_query}
-    
-    r = requests.post(url, data=data)
-    
+    letter = "" if len(sys.argv) == 1 else sys.argv[1]
+    payload = {"q": letter}
+
+    r = requests.post("http://0.0.0.0:5000/search_user", data=payload)
     try:
-        
-        content = r.json()
-        
-        if content:
-            
-            print("[{}] {}".format(content['id'], content['name']))
-            
-        else:
-            
+        response = r.json()
+        if response == {}:
             print("No result")
-            
-    except Exception:
-        
+        else:
+            print("[{}] {}".format(response.get("id"), response.get("name")))
+    except ValueError:
         print("Not a valid JSON")
